@@ -5,6 +5,8 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -104,6 +106,37 @@ namespace ag.DbData.SqlServer
                 throw new DbDataException(ex, "");
             }
         }
+
+        /// <inheritdoc />
+        public override async Task<int> ExecuteAsync(string query) => await innerExecuteAsync(query, CancellationToken.None);
+
+        /// <inheritdoc />
+        public override async Task<int> ExecuteAsync(string query, int timeout) =>
+            await innerExecuteAsync(query, CancellationToken.None, timeout);
+
+        /// <inheritdoc />
+        public override async Task<int> ExecuteAsync(string query, CancellationToken cancellationToken) =>
+            await innerExecuteAsync(query, cancellationToken);
+
+        /// <inheritdoc />
+        public override async Task<int> ExecuteAsync(string query, int timeout, CancellationToken cancellationToken) =>
+            await innerExecuteAsync(query, cancellationToken, timeout);
+
+        /// <inheritdoc />
+        public override async Task<object> GetScalarAsync(string query) => await innerGetScalarAsync(query, CancellationToken.None);
+
+        /// <inheritdoc />
+        public override async Task<object> GetScalarAsync(string query, int timeout) => await
+            innerGetScalarAsync(query, CancellationToken.None, timeout);
+
+        /// <inheritdoc />
+        public override async Task<object> GetScalarAsync(string query, CancellationToken cancellationToken) => await
+            innerGetScalarAsync(query, cancellationToken);
+
+        /// <inheritdoc />
+        public override async Task<object> GetScalarAsync(string query, int timeout,
+            CancellationToken cancellationToken) => await innerGetScalarAsync(query, cancellationToken, timeout);
+
         #endregion
 
         #region private procedures
@@ -116,8 +149,6 @@ namespace ag.DbData.SqlServer
                     ? (SqlConnection)TransConnection
                     : (SqlConnection)Connection))
                 {
-                    if (inTransaction)
-                        cmd.Transaction = (SqlTransaction)Transaction;
                     if (timeout != -1)
                     {
                         if (timeout >= 0)
@@ -125,6 +156,8 @@ namespace ag.DbData.SqlServer
                         else
                             throw new ArgumentException("Invalid CommandTimeout value", nameof(timeout));
                     }
+                    if (inTransaction)
+                        cmd.Transaction = (SqlTransaction)Transaction;
                     using (var da = new SqlDataAdapter(cmd))
                     {
                         da.Fill(dataSet);
@@ -156,8 +189,6 @@ namespace ag.DbData.SqlServer
                     ? (SqlConnection)TransConnection
                     : (SqlConnection)Connection))
                 {
-                    if (inTransaction)
-                        cmd.Transaction = (SqlTransaction)Transaction;
                     if (timeout != -1)
                     {
                         if (timeout >= 0)
@@ -165,6 +196,8 @@ namespace ag.DbData.SqlServer
                         else
                             throw new ArgumentException("Invalid CommandTimeout value", nameof(timeout));
                     }
+                    if (inTransaction)
+                        cmd.Transaction = (SqlTransaction)Transaction;
                     using (var da = new SqlDataAdapter(cmd))
                     {
                         da.Fill(table);
@@ -183,6 +216,13 @@ namespace ag.DbData.SqlServer
         {
             try
             {
+                if (timeout != -1)
+                {
+                    if (timeout >= 0)
+                        cmd.CommandTimeout = timeout;
+                    else
+                        throw new ArgumentException("Invalid CommandTimeout value", nameof(timeout));
+                }
                 if (inTransaction)
                 {
                     cmd.Connection = (SqlConnection)TransConnection;
@@ -192,13 +232,6 @@ namespace ag.DbData.SqlServer
                 {
                     cmd.Connection = (SqlConnection)Connection;
                     Connection.Open();
-                }
-                if (timeout != -1)
-                {
-                    if (timeout >= 0)
-                        cmd.CommandTimeout = timeout;
-                    else
-                        throw new ArgumentException("Invalid CommandTimeout value", nameof(timeout));
                 }
                 var rows = cmd.ExecuteNonQuery();
                 return rows;
@@ -214,6 +247,77 @@ namespace ag.DbData.SqlServer
                     Connection.Close();
             }
         }
+
+        private async Task<int> innerExecuteAsync(string query, CancellationToken cancellationToken, int timeout = -1)
+        {
+            try
+            {
+                return await Task.Run(async () =>
+                {
+                    int rows;
+                    using (var asyncConnection = new SqlConnection(Connection.ConnectionString))
+                    {
+                        using (var cmd = asyncConnection.CreateCommand())
+                        {
+                            cmd.CommandText = query;
+                            if (timeout != -1)
+                            {
+                                if (timeout >= 0)
+                                    cmd.CommandTimeout = timeout;
+                                else
+                                    throw new ArgumentException("Invalid CommandTimeout value", nameof(timeout));
+                            }
+
+                            await asyncConnection.OpenAsync(cancellationToken);
+
+                            rows = await cmd.ExecuteNonQueryAsync(cancellationToken);
+                        }
+                    }
+                    return rows;
+                }, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogError(ex, "Error at ExecuteCommandAsync");
+                throw new DbDataException(ex, query);
+            }
+        }
+
+        private async Task<object> innerGetScalarAsync(string query, CancellationToken cancellationToken, int timeout = -1)
+        {
+            try
+            {
+                return await Task.Run(async () =>
+                {
+                    object obj;
+                    using (var asyncConnection = new SqlConnection(Connection.ConnectionString))
+                    {
+                        using (var cmd = asyncConnection.CreateCommand())
+                        {
+                            cmd.CommandText = query;
+                            if (timeout != -1)
+                            {
+                                if (timeout >= 0)
+                                    cmd.CommandTimeout = timeout;
+                                else
+                                    throw new ArgumentException("Invalid CommandTimeout value", nameof(timeout));
+                            }
+
+                            await asyncConnection.OpenAsync(cancellationToken);
+
+                            obj = await cmd.ExecuteScalarAsync(cancellationToken);
+                        }
+                    }
+                    return obj;
+                }, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogError(ex, "Error at GetScalarAsync");
+                throw new DbDataException(ex, query);
+            }
+        }
+
         #endregion
     }
 }
