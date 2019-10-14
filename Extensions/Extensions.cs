@@ -1,5 +1,7 @@
 ﻿using ag.DbData.Abstraction;
+using ag.DbData.Abstraction.Services;
 using ag.DbData.SqlServer.Factories;
+using ag.DbData.SqlServer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,6 +20,8 @@ namespace ag.DbData.SqlServer.Extensions
         /// <returns><see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddAgSqlServer(this IServiceCollection services)
         {
+            services.AddSingleton<SqlServerStringProvider>();
+            services.AddSingleton<IDbDataStringProviderFactory<SqlServerStringProvider>, SqlServerStringProviderFactory>();
             services.AddSingleton<ISqlServerDbDataFactory, SqlServerDbDataFactory>();
             services.AddTransient<SqlServerDbDataObject>();
             return services;
@@ -31,8 +35,7 @@ namespace ag.DbData.SqlServer.Extensions
         /// <returns><see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddAgSqlServer(this IServiceCollection services, IConfigurationSection configurationSection)
         {
-            services.AddSingleton<ISqlServerDbDataFactory, SqlServerDbDataFactory>();
-            services.AddTransient<SqlServerDbDataObject>();
+            services.AddAgSqlServer();
             services.Configure<DbDataSettings>(configurationSection);
             return services;
         }
@@ -46,8 +49,7 @@ namespace ag.DbData.SqlServer.Extensions
         public static IServiceCollection AddAgSqlServer(this IServiceCollection services,
             Action<DbDataSettings> configureOptions)
         {
-            services.AddSingleton<ISqlServerDbDataFactory, SqlServerDbDataFactory>();
-            services.AddTransient<SqlServerDbDataObject>();
+            services.AddAgSqlServer();
             services.Configure(configureOptions);
             return services;
         }

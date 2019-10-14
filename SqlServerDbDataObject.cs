@@ -1,4 +1,8 @@
 ﻿using ag.DbData.Abstraction;
+using ag.DbData.Abstraction.Services;
+using ag.DbData.SqlServer.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,8 +11,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace ag.DbData.SqlServer
 {
@@ -23,7 +25,10 @@ namespace ag.DbData.SqlServer
         /// </summary>
         /// <param name="logger"><see cref="ILogger"/> object.</param>
         /// <param name="options"><see cref="DbDataSettings"/> options.</param>
-        public SqlServerDbDataObject(ILogger<IDbDataObject> logger, IOptions<DbDataSettings> options) : base(logger, options) { }
+        /// <param name="stringProviderFactory"><see cref="SqlServerStringProvider"/> object.</param>
+        public SqlServerDbDataObject(ILogger<IDbDataObject> logger, IOptions<DbDataSettings> options, IDbDataStringProviderFactory<SqlServerStringProvider> stringProviderFactory) :
+            base(logger, options, stringProviderFactory.Get())
+        { }
         #endregion
 
         #region Overrides
@@ -102,7 +107,7 @@ namespace ag.DbData.SqlServer
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, $"Error at BeginTransaction");
+                Logger?.LogError(ex, "Error at BeginTransaction");
                 throw new DbDataException(ex, "");
             }
         }
@@ -256,7 +261,7 @@ namespace ag.DbData.SqlServer
                 return await Task.Run(async () =>
                 {
                     int rows;
-                    using (var asyncConnection = new SqlConnection(Connection.ConnectionString))
+                    using (var asyncConnection = new SqlConnection(StringProvider.ConnectionString))
                     {
                         using (var cmd = asyncConnection.CreateCommand())
                         {
@@ -291,7 +296,7 @@ namespace ag.DbData.SqlServer
                 return await Task.Run(async () =>
                 {
                     object obj;
-                    using (var asyncConnection = new SqlConnection(Connection.ConnectionString))
+                    using (var asyncConnection = new SqlConnection(StringProvider.ConnectionString))
                     {
                         using (var cmd = asyncConnection.CreateCommand())
                         {
