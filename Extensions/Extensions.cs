@@ -1,10 +1,10 @@
 ﻿using ag.DbData.Abstraction;
 using ag.DbData.Abstraction.Services;
 using ag.DbData.SqlServer.Factories;
-using ag.DbData.SqlServer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ag.DbData.SqlServer.Extensions
 {
@@ -20,8 +20,7 @@ namespace ag.DbData.SqlServer.Extensions
         /// <returns><see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddAgSqlServer(this IServiceCollection services)
         {
-            services.AddSingleton<SqlServerStringProvider>();
-            services.AddSingleton<IDbDataStringProviderFactory<SqlServerStringProvider>, SqlServerStringProviderFactory>();
+            services.TryAddTransient<IDbDataStringProvider, DbDataStringProvider>();
             services.AddSingleton<ISqlServerDbDataFactory, SqlServerDbDataFactory>();
             services.AddTransient<SqlServerDbDataObject>();
             return services;

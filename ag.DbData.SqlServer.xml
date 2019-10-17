@@ -53,40 +53,18 @@
             </summary>
             <param name="serviceProvider"><see cref="T:System.IServiceProvider"/>.</param>
         </member>
-        <member name="T:ag.DbData.SqlServer.Services.SqlServerStringProvider">
-            <summary>
-            Represents concrete class inherited from <see cref="T:ag.DbData.Abstraction.Services.DbDataStringProvider"/>.
-            </summary>
-        </member>
-        <member name="T:ag.DbData.SqlServer.Services.SqlServerStringProviderFactory">
-            <summary>
-            Represents <see cref="T:ag.DbData.SqlServer.Services.SqlServerStringProviderFactory"/> object.
-            </summary>
-        </member>
-        <member name="M:ag.DbData.SqlServer.Services.SqlServerStringProviderFactory.#ctor(System.IServiceProvider)">
-            <summary>
-            Creates new instance of <see cref="T:ag.DbData.SqlServer.Services.SqlServerStringProviderFactory"/>.
-            </summary>
-            <param name="serviceProvider"><see cref="T:System.IServiceProvider"/>.</param>
-        </member>
-        <member name="M:ag.DbData.SqlServer.Services.SqlServerStringProviderFactory.Get">
-            <summary>
-            Creates object of type <see cref="T:ag.DbData.SqlServer.Services.SqlServerStringProvider"/>.
-            </summary>
-            <returns>Object of type <see cref="T:ag.DbData.SqlServer.Services.SqlServerStringProvider"/>.</returns>
-        </member>
         <member name="T:ag.DbData.SqlServer.SqlServerDbDataObject">
             <summary>
             Represents SqlServerDbDataObject object.
             </summary>
         </member>
-        <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.#ctor(Microsoft.Extensions.Logging.ILogger{ag.DbData.Abstraction.IDbDataObject},Microsoft.Extensions.Options.IOptions{ag.DbData.Abstraction.DbDataSettings},ag.DbData.Abstraction.Services.IDbDataStringProviderFactory{ag.DbData.SqlServer.Services.SqlServerStringProvider})">
+        <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.#ctor(Microsoft.Extensions.Logging.ILogger{ag.DbData.Abstraction.IDbDataObject},Microsoft.Extensions.Options.IOptions{ag.DbData.Abstraction.DbDataSettings},ag.DbData.Abstraction.Services.IDbDataStringProvider)">
             <summary>
             Creates new instance of <see cref="T:ag.DbData.SqlServer.SqlServerDbDataObject"/>.
             </summary>
             <param name="logger"><see cref="T:Microsoft.Extensions.Logging.ILogger"/> object.</param>
             <param name="options"><see cref="T:ag.DbData.Abstraction.DbDataSettings"/> options.</param>
-            <param name="stringProviderFactory"><see cref="T:ag.DbData.SqlServer.Services.SqlServerStringProvider"/> object.</param>
+            <param name="stringProvider"><see cref="T:ag.DbData.Abstraction.Services.IDbDataStringProvider"/> object.</param>
         </member>
         <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.FillDataSet(System.String)">
             <inheritdoc />
