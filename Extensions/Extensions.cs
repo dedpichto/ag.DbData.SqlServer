@@ -1,10 +1,9 @@
-﻿using ag.DbData.Abstraction;
-using ag.DbData.Abstraction.Services;
+﻿using ag.DbData.Abstraction.Services;
 using ag.DbData.SqlServer.Factories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
 
 namespace ag.DbData.SqlServer.Extensions
 {
@@ -35,7 +34,11 @@ namespace ag.DbData.SqlServer.Extensions
         public static IServiceCollection AddAgSqlServer(this IServiceCollection services, IConfigurationSection configurationSection)
         {
             services.AddAgSqlServer();
-            services.Configure<DbDataSettings>(configurationSection);
+            services.Configure<SqlServerDbDataSettings>(opts =>
+            {
+                opts.AllowExceptionLogging = configurationSection.GetValue<bool>("AllowExceptionLogging");
+                opts.ConnectionString = configurationSection.GetValue<string>("ConnectionString");
+            });
             return services;
         }
 
@@ -46,7 +49,7 @@ namespace ag.DbData.SqlServer.Extensions
         /// <param name="configureOptions">The action used to configure the options.</param>
         /// <returns><see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddAgSqlServer(this IServiceCollection services,
-            Action<DbDataSettings> configureOptions)
+            Action<SqlServerDbDataSettings> configureOptions)
         {
             services.AddAgSqlServer();
             services.Configure(configureOptions);

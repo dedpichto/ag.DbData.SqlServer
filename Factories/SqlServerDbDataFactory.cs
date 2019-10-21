@@ -15,6 +15,16 @@ namespace ag.DbData.SqlServer.Factories
         /// <summary>
         /// Creates object of type <see cref="SqlServerDbDataObject"/>.
         /// </summary>
+        /// <returns><see cref="SqlServerDbDataObject"/> implementation of <see cref="IDbDataObject"/> interface.</returns>
+        public IDbDataObject Create()
+        {
+            var dbObject = _serviceProvider.GetService<SqlServerDbDataObject>();
+            return dbObject;
+        }
+
+        /// <summary>
+        /// Creates object of type <see cref="SqlServerDbDataObject"/>.
+        /// </summary>
         /// <param name="connectionString">Database connection string.</param>
         /// <returns><see cref="SqlServerDbDataObject"/> implementation of <see cref="IDbDataObject"/> interface.</returns>
         public IDbDataObject Create(string connectionString)
@@ -23,8 +33,7 @@ namespace ag.DbData.SqlServer.Factories
             dbObject.Connection = new SqlConnection(connectionString);
             return dbObject;
         }
-
-
+        
         /// <summary>
         /// Creates new SqlServerDbDataFactory object.
         /// </summary>
