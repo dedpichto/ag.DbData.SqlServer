@@ -8,7 +8,7 @@ namespace ag.DbData.SqlServer.Factories
     /// <summary>
     /// Represents SqlDbDataFactory object.
     /// </summary>
-    public class SqlServerDbDataFactory : ISqlServerDbDataFactory
+    internal class SqlServerDbDataFactory : ISqlServerDbDataFactory
     {
         private readonly IServiceProvider _serviceProvider;
 

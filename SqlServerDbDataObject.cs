@@ -16,7 +16,7 @@ namespace ag.DbData.SqlServer
     /// <summary>
     /// Represents SqlServerDbDataObject object.
     /// </summary>
-    public class SqlServerDbDataObject : DbDataObject
+    internal class SqlServerDbDataObject : DbDataObject
     {
         #region ctor
 
