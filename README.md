@@ -6,8 +6,9 @@ A library for working with Sql Server databases in .NET Framework, .NET Core and
 1. Add section to settings file (optional)
 ```csharp
 {
-  "DbDataSettings": {
-    "AllowExceptionLogging": false 
+  "SqlServerDbDataSettings": {
+    "AllowExceptionLogging": false, // optional, default is "true"
+    "ConnectionString": "YOUR_CONNECTION_STRING" // optional
   }
 }
 ```
@@ -24,7 +25,8 @@ services.AddAgSqlServer(config.GetSection("DbDataSettings"));
 // or
 services.AddAgSqlServer(opts =>
 {
-  opts.AllowExceptionLogging = false; 
+    opts.AllowExceptionLogging = false; // optional
+    opts.ConnectionString = YOUR_CONNECTION_STRING; // optional
 });
 ```
 4. Inject ISqlServerDbDataFactory into your classes:
@@ -48,6 +50,19 @@ using (var sqlServerDbData = _sqlServerFactory.Create(YOUR_CONNECTION_STRING))
         }
     }
 }
+
+// in case you have defined connection string in configuration setting you may call Create() method
+// without parameter
+using (var sqlServerDbDatasqlServerDbData = _sqlServerFactory.Create())
+{
+    using (var t = sqlServerDbData.FillDataTable("SELECT * FROM YOUR_TABLE"))
+    {
+        foreach (DataRow r in t.Rows)
+        {
+             Console.WriteLine(r[0]);
+        }
+    }
+}
 ```
 
 ## Installation
@@ -58,6 +73,7 @@ Use Nuget package manager.
 #### DbDataSettings properties:
 ```csharp
 bool AllowExceptionLogging;
+string ConnectionString;
 ```
 Specifies whether exceptions logging is allowed. Default value is ```true```.
 #### Extension methods:
@@ -74,6 +90,10 @@ IServiceCollection AddAgSqlServer(this IServiceCollection services, Action<DbDat
 ```
 Appends the registration of ```IDbDataFactory``` and ```IDbDataObject``` to ```IServiceCollection``` and configures the options.
 #### IDbDataFactory methods:
+```csharp
+IDbDataObject Create()
+```
+Creates ```IDbDataObject```, using connection string specified in settings.
 ```csharp
 IDbDataObject Create(string connectionString)
 ```
