@@ -123,6 +123,9 @@
         <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.BeginTransaction(System.String)">
             <inheritdoc />
         </member>
+        <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.BeginTransaction">
+            <inheritdoc />
+        </member>
         <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.ExecuteAsync(System.String)">
             <inheritdoc />
         </member>
