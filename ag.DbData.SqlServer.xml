@@ -108,6 +108,18 @@
         <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.FillDataTableInTransaction(System.String,System.Int32)">
             <inheritdoc />
         </member>
+        <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.FillDataTable(System.Data.Common.DbCommand)">
+            <inheritdoc />
+        </member>
+        <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.FillDataTable(System.Data.Common.DbCommand,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.FillDataTableInTransaction(System.Data.Common.DbCommand)">
+            <inheritdoc />
+        </member>
+        <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.FillDataTableInTransaction(System.Data.Common.DbCommand,System.Int32)">
+            <inheritdoc />
+        </member>
         <member name="M:ag.DbData.SqlServer.SqlServerDbDataObject.ExecuteCommand(System.Data.Common.DbCommand)">
             <inheritdoc />
         </member>

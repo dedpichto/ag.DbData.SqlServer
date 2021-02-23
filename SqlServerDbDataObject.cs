@@ -76,6 +76,18 @@ namespace ag.DbData.SqlServer
             innerFillDataTable(query, timeout, true);
 
         /// <inheritdoc />
+        public override DataTable FillDataTable(DbCommand dbCommand) => innerFillDataTable((SqlCommand)dbCommand, -1, false);
+
+        /// <inheritdoc />
+        public override DataTable FillDataTable(DbCommand dbCommand, int timeout) => innerFillDataTable((SqlCommand)dbCommand, timeout, false);
+
+        /// <inheritdoc />
+        public override DataTable FillDataTableInTransaction(DbCommand dbCommand) => innerFillDataTable((SqlCommand)dbCommand, -1, true);
+
+        /// <inheritdoc />
+        public override DataTable FillDataTableInTransaction(DbCommand dbCommand, int timeout) => innerFillDataTable((SqlCommand)dbCommand, timeout, true);
+
+        /// <inheritdoc />
         public override int ExecuteCommand(DbCommand cmd) => innerExecuteCommand((SqlCommand)cmd, -1, false);
 
         /// <inheritdoc />
@@ -222,6 +234,32 @@ namespace ag.DbData.SqlServer
             {
                 Logger?.LogError(ex, $"Error at FillDataTable; command text: {query}");
                 throw new DbDataException(ex, query);
+            }
+        }
+
+        private DataTable innerFillDataTable(SqlCommand command, int timeout, bool inTransaction)
+        {
+            try
+            {
+                var table = new DataTable();
+                command.Connection = inTransaction
+                    ? (SqlConnection)TransConnection
+                    : (SqlConnection)Connection;
+                if (!IsValidTimeout(command, timeout))
+                    throw new ArgumentException("Invalid CommandTimeout value", nameof(timeout));
+
+                if (inTransaction)
+                    command.Transaction = (SqlTransaction)Transaction;
+                using (var da = new SqlDataAdapter(command))
+                {
+                    da.Fill(table);
+                }
+                return table;
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogError(ex, $"Error at FillDataTable; command text: {command.CommandText}");
+                throw new DbDataException(ex, command.CommandText);
             }
         }
 

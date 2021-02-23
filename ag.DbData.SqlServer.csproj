@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Simplifies working with SQL Server databases in .NET Framework, .NET Core and .NET Standard projects</Description>
-    <Version>3.0.0.4</Version>
+    <Version>3.0.0.5</Version>
     <Authors>Andrey Gruber</Authors>
     <PackageTags>Database, SQLServer, ADO.NET, .NET, Core, Snandard, Framework</PackageTags>
     <RepositoryUrl>https://github.com/dedpichto/ag.DbData.SqlServer</RepositoryUrl>
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ag.DbData.Abstraction" Version="3.0.0.4" />
+    <PackageReference Include="ag.DbData.Abstraction" Version="3.0.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.6" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.6" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
