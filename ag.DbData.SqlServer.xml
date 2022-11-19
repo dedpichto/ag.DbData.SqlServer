@@ -53,6 +53,13 @@
             <param name="connectionString">Database connection string.</param>
             <returns><see cref="T:ag.DbData.SqlServer.SqlServerDbDataObject"/> implementation of <see cref="T:ag.DbData.Abstraction.IDbDataObject"/> interface.</returns>
         </member>
+        <member name="M:ag.DbData.SqlServer.Factories.SqlServerDbDataFactory.Create(System.Int32)">
+            <summary>
+            Creates object of type <see cref="T:ag.DbData.SqlServer.SqlServerDbDataObject"/>.
+            </summary>
+            <param name="defaultCommandTimeOut">Replaces default coommand timeout of provider</param>
+            <returns></returns>
+        </member>
         <member name="M:ag.DbData.SqlServer.Factories.SqlServerDbDataFactory.#ctor(System.IServiceProvider)">
             <summary>
             Creates new SqlServerDbDataFactory object.

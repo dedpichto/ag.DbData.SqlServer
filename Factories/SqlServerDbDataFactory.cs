@@ -33,7 +33,19 @@ namespace ag.DbData.SqlServer.Factories
             dbObject.Connection = new SqlConnection(connectionString);
             return dbObject;
         }
-        
+
+        /// <summary>
+        /// Creates object of type <see cref="SqlServerDbDataObject"/>.
+        /// </summary>
+        /// <param name="defaultCommandTimeOut">Replaces default coommand timeout of provider</param>
+        /// <returns></returns>
+        public IDbDataObject Create(int defaultCommandTimeOut)
+        {
+            var dbObject = _serviceProvider.GetService<SqlServerDbDataObject>();
+            dbObject.DefaultCommandTimeout = defaultCommandTimeOut;
+            return dbObject;
+        }
+
         /// <summary>
         /// Creates new SqlServerDbDataFactory object.
         /// </summary>
