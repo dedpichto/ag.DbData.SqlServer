@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Simplifies working with SQL Server databases in .NET Framework, .NET Core and .NET Standard projects</Description>
-    <Version>3.0.0.9</Version>
+    <Version>3.0.1.0</Version>
     <Authors>Andrey Gruber</Authors>
     <PackageTags>Database, SQLServer, ADO.NET, .NET, Core, Snandard, Framework</PackageTags>
     <RepositoryUrl>https://github.com/dedpichto/ag.DbData.SqlServer</RepositoryUrl>
     <PackageProjectUrl>https://github.com/dedpichto/ag.DbData.SqlServer</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>Updtes Nuget dependencies</PackageReleaseNotes>
+    <PackageReleaseNotes>Updates Syste.Data.SqlClient dependency to the latest verstion (4.90)</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -34,7 +34,7 @@
     <PackageReference Include="ag.DbData.Abstraction" Version="3.0.0.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
 </Project>
