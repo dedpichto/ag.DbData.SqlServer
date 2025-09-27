@@ -6,10 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+#if NET472
+using System.Data.SqlClient;
+#else
+using Microsoft.Data.SqlClient;
+#endif
 
 namespace ag.DbData.SqlServer
 {
@@ -102,16 +106,10 @@ namespace ag.DbData.SqlServer
             innerExecuteCommand((SqlCommand)cmd, timeout, true);
 
         /// <inheritdoc />
-        public override bool BeginTransaction(string connectionString)
-        {
-            return innerBeginTransaction(connectionString);
-        }
+        public override bool BeginTransaction(string connectionString) => innerBeginTransaction(connectionString);
 
         /// <inheritdoc />
-        public override bool BeginTransaction()
-        {
-            return innerBeginTransaction(StringProvider.ConnectionString);
-        }
+        public override bool BeginTransaction() => innerBeginTransaction(StringProvider.ConnectionString);
 
         /// <inheritdoc />
         public override async Task<int> ExecuteAsync(string query) => await innerExecuteAsync(query, CancellationToken.None);
