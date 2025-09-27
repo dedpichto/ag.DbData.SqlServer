@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net472;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     <Description>Simplifies working with SQL Server databases in .NET Framework, .NET Core and .NET Standard projects</Description>
-    <Version>3.0.1.0</Version>
+    <Version>3.0.1.1</Version>
     <Authors>Andrey Gruber</Authors>
     <PackageTags>Database, SQLServer, ADO.NET, .NET, Core, Snandard, Framework</PackageTags>
     <RepositoryUrl>https://github.com/dedpichto/ag.DbData.SqlServer</RepositoryUrl>
@@ -30,11 +30,20 @@
     <None Include="readme.txt" Pack="true" PackagePath="." />
   </ItemGroup>
 
+  <!-- Only reference System.Data.SqlClient for .NET Framework 4.7.2 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  </ItemGroup>
+
+  <!-- Only reference Microsoft.Data.SqlClient for .NET Core/.NET 5+ -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="ag.DbData.Abstraction" Version="3.0.0.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.9" />
   </ItemGroup>
 
 </Project>
