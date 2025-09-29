@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFrameworks>net472;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     <Description>Simplifies working with SQL Server databases in .NET Framework, .NET Core and .NET Standard projects</Description>
-    <Version>3.0.1.1</Version>
+    <Version>3.0.1.1-preview.1</Version>
     <Authors>Andrey Gruber</Authors>
     <PackageTags>Database, SQLServer, ADO.NET, .NET, Core, Snandard, Framework</PackageTags>
     <RepositoryUrl>https://github.com/dedpichto/ag.DbData.SqlServer</RepositoryUrl>
     <PackageProjectUrl>https://github.com/dedpichto/ag.DbData.SqlServer</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>Updates Syste.Data.SqlClient dependency to the latest verstion (4.90)</PackageReleaseNotes>
+    <PackageReleaseNotes>Leaves Syste.Data.SqlClient dependency for .NET Framework 4.7.2 version only, other versions will use Microsoft.Data.SqlClient </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
