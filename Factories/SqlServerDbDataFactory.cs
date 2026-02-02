@@ -1,7 +1,7 @@
 ﻿using ag.DbData.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-#if NET472
+#if NET472 || NETSTANDARD
 using System.Data.SqlClient;
 #else
 using Microsoft.Data.SqlClient;

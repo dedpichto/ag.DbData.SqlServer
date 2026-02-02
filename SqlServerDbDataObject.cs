@@ -9,7 +9,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-#if NET472
+#if NET472 || NETSTANDARD
 using System.Data.SqlClient;
 #else
 using Microsoft.Data.SqlClient;
